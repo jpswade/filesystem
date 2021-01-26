@@ -731,7 +731,7 @@ class Filesystem
      */
     public function humanReadableSize()
     {
-        $bytes = $this->size;
+        $bytes = $this->size();
         for ($i = 0; ($bytes / self::BYTE_NEXT) >= 0.9 && $i < count(self::BYTE_UNITS); $i++) $bytes /= self::BYTE_NEXT;
         return round($bytes, self::BYTE_PRECISION[$i]) . self::BYTE_UNITS[$i];
     }
