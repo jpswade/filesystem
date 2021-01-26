@@ -15,6 +15,10 @@ use Symfony\Component\Mime\MimeTypes;
 
 class Filesystem
 {
+    public const BYTE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    public const BYTE_PRECISION = [0, 0, 1, 2, 2, 3, 3, 4, 4];
+    public const BYTE_NEXT = 1024;
+    
     use Macroable;
 
     /**
@@ -718,5 +722,17 @@ class Filesystem
     public function cleanDirectory($directory)
     {
         return $this->deleteDirectory($directory, true);
+    }
+    
+    /**
+     * Return size in a human readable format.
+     *
+     * @return string
+     */
+    public function humanReadableSize()
+    {
+        $bytes = $this->size;
+        for ($i = 0; ($bytes / self::BYTE_NEXT) >= 0.9 && $i < count(self::BYTE_UNITS); $i++) $bytes /= self::BYTE_NEXT;
+        return round($bytes, self::BYTE_PRECISION[$i]) . self::BYTE_UNITS[$i];
     }
 }
